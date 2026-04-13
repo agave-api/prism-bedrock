@@ -10,6 +10,18 @@
   },
   "authors": [
     {
+      "name": "Wojt Janowski",
+      "email": "wojt@clinically.com.au"
+    },
+    {
+      "name": "TJ Miller",
+      "email": "hello@echolabs.dev"
+    },
+    {
+      "name": "Chris Bridges",
+      "email": "chris.bridges@tacit.legal"
+    },
+    {
       "name": "Agave API"
     }
   ],
