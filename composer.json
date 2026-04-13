@@ -1,5 +1,5 @@
 {
-  "name": "clinically/prism-bedrock",
+  "name": "agave-api/prism-bedrock",
   "description": "A Prism provider for AWS Bedrock. Fork of prism-php/bedrock.",
   "type": "library",
   "license": "MIT",
@@ -10,21 +10,12 @@
   },
   "authors": [
     {
-      "name": "Wojt Janowski",
-      "email": "wojt@clinically.com.au"
-    },
-    {
-      "name": "TJ Miller",
-      "email": "hello@echolabs.dev"
-    },
-    {
-      "name": "Chris Bridges",
-      "email": "chris.bridges@tacit.legal"
+      "name": "Agave API"
     }
   ],
   "require": {
-    "php": "^8.2",
-    "laravel/framework": "^11.0|^12.0|^13.0",
+    "php": "^8.3",
+    "laravel/framework": "^13.0",
     "aws/aws-sdk-php": "^3.339",
     "prism-php/prism": ">=0.99.7"
   },

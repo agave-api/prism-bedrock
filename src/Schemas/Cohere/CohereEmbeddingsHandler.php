@@ -2,9 +2,9 @@
 
 namespace Clinically\PrismBedrock\Schemas\Cohere;
 
+use Clinically\PrismBedrock\Contracts\BedrockEmbeddingsHandler;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
-use Clinically\PrismBedrock\Contracts\BedrockEmbeddingsHandler;
 use Prism\Prism\Embeddings\Request;
 use Prism\Prism\Embeddings\Response as EmbeddingsResponse;
 use Prism\Prism\Exceptions\PrismException;
@@ -63,15 +63,24 @@ class CohereEmbeddingsHandler extends BedrockEmbeddingsHandler
     protected function buildResponse(): EmbeddingsResponse
     {
         $body = $this->httpResponse->json();
+        $raw_embeddings_object = data_get($body, 'embeddings', []);
+        $response_type = data_get($body, 'response_type');
+        if ($response_type === 'embeddings_by_type') {
+            $raw_embeddings = count($raw_embeddings_object) > 1
+                ? Arr::dot($raw_embeddings_object, depth: 1)
+                : Arr::first($raw_embeddings_object);
+        } else {
+            $raw_embeddings = $raw_embeddings_object;
+        }
 
         return new EmbeddingsResponse(
-            embeddings: array_map(Embedding::fromArray(...), data_get($body, 'embeddings', [])),
+            embeddings: array_map(Embedding::fromArray(...), $raw_embeddings),
             usage: new EmbeddingsUsage(
                 tokens: (int) $this->httpResponse->header('X-Amzn-Bedrock-Input-Token-Count')
             ),
             meta: new Meta(
                 id: data_get($body, 'id', ''),
-                model: ''
+                model: $this->request->model(),
             )
         );
     }

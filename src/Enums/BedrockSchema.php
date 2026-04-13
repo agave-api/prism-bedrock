@@ -2,7 +2,6 @@
 
 namespace Clinically\PrismBedrock\Enums;
 
-use Illuminate\Support\Str;
 use Clinically\PrismBedrock\Contracts\BedrockEmbeddingsHandler;
 use Clinically\PrismBedrock\Contracts\BedrockImagesHandler;
 use Clinically\PrismBedrock\Contracts\BedrockStreamHandler;
@@ -16,7 +15,9 @@ use Clinically\PrismBedrock\Schemas\Converse\ConverseStreamHandler;
 use Clinically\PrismBedrock\Schemas\Converse\ConverseStructuredHandler;
 use Clinically\PrismBedrock\Schemas\Converse\ConverseTextHandler;
 use Clinically\PrismBedrock\Schemas\Stability\StabilityImagesHandler;
+use Clinically\PrismBedrock\Schemas\Titan\TitanEmbeddingsHandler;
 use Clinically\PrismBedrock\Schemas\Titan\TitanImagesHandler;
+use Illuminate\Support\Str;
 
 enum BedrockSchema: string
 {
@@ -69,6 +70,7 @@ enum BedrockSchema: string
     {
         return match ($this) {
             self::Cohere => CohereEmbeddingsHandler::class,
+            self::Titan => TitanEmbeddingsHandler::class,
             default => null
         };
     }
@@ -107,7 +109,9 @@ enum BedrockSchema: string
             return self::Stability;
         }
 
-        if (Str::contains($string, 'amazon.titan-image')) {
+        if (Str::contains($string, 'amazon.titan-image') ||
+            Str::contains($string, 'amazon.titan-embed')
+        ) {
             return self::Titan;
         }
 
